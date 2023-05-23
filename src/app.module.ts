@@ -7,23 +7,17 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
+import dbConfig from './config/db.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
+    ConfigModule.forRoot({ isGlobal: true, load: [configuration, dbConfig] }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => ({
-        type: 'mysql',
-        host: config.get<string>('DATABASE.HOST'),
-        port: config.get<number>('DATABASE.PORT'),
-        username: config.get<string>('DATABASE.USERNAME'),
-        password: config.get<string>('DATABASE.PASSWORD'),
-        database: config.get<string>('DATABASE.NAME'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
       inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        ...(await configService.get('database')),
+      }),
     }),
     UserModule,
     AuthModule,
