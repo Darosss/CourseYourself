@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import 'dotenv/config';
+
 export default registerAs('database', (): MysqlConnectionOptions => {
   return {
     type: 'mysql',
@@ -12,10 +13,15 @@ export default registerAs('database', (): MysqlConnectionOptions => {
     name: process.env.DATABASE_NAME,
     database: process.env.DATABASE_NAME,
     synchronize: false,
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    migrations: [__dirname + '/../**/migrations/*{.ts,.js}'],
     cli: {
-      migrationsDir: '/migrations',
+      migrationsDir: [__dirname + '/../**/migrations/*{.ts,.js}'],
     },
+    migrationsRun: true,
+    autoLoadEntities: true,
   } as MysqlConnectionOptions;
 });
+
+console.log('wtf', [__dirname + '/../**/migrations/*{.ts,.js}']);
+console.log('kekw', [__dirname + '/../**/*.entity{.ts,.js}']);
