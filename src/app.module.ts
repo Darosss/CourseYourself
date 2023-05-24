@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { WorkoutModule } from './workout/workout.module';
 import configuration from './config/configuration';
 import dbConfig from './config/db.config';
 
@@ -21,6 +22,7 @@ import dbConfig from './config/db.config';
     }),
     UserModule,
     AuthModule,
+    WorkoutModule,
   ],
   controllers: [AppController],
   providers: [
