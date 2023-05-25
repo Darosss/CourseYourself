@@ -45,6 +45,8 @@ export class WorkoutService {
     workout.repeatFrequency =
       updateWorkoutDto.repeatFrequency || workout.repeatFrequency;
     workout.repeatDays = updateWorkoutDto.repeatDays || workout.repeatDays;
+
+    return this.workouRepostiory.save(workout);
   }
 
   async remove(id: string) {
