@@ -22,6 +22,3 @@ export default registerAs('database', (): MysqlConnectionOptions => {
     autoLoadEntities: true,
   } as MysqlConnectionOptions;
 });
-
-console.log('wtf', [__dirname + '/../**/migrations/*{.ts,.js}']);
-console.log('kekw', [__dirname + '/../**/*.entity{.ts,.js}']);

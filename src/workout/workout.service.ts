@@ -14,8 +14,6 @@ export class WorkoutService {
 
   async create(createWorkoutDto: CreateWorkoutDto) {
     const workout = this.workouRepostiory.create(createWorkoutDto);
-    console.log(workout);
-    console.log('xd', createWorkoutDto);
     return await this.workouRepostiory.save(workout);
   }
 

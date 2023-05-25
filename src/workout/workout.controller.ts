@@ -17,7 +17,6 @@ export class WorkoutController {
 
   @Post()
   async create(@Body() createWorkoutDto: CreateWorkoutDto) {
-    console.log(createWorkoutDto);
     return await this.workoutService.create(createWorkoutDto);
   }
 
