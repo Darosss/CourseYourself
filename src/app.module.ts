@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { WorkoutModule } from './workout/workout.module';
 import configuration from './config/configuration';
 import dbConfig from './config/db.config';
+import { ExerciseModule } from './exercise/exercise.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import dbConfig from './config/db.config';
     UserModule,
     AuthModule,
     WorkoutModule,
+    ExerciseModule,
   ],
   controllers: [AppController],
   providers: [
