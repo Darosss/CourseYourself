@@ -3,7 +3,7 @@ import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Exercise } from './entities/exercise.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class ExerciseService {
@@ -20,6 +20,10 @@ export class ExerciseService {
   async findAll() {
     const exercises = await this.exerciseRepository.find({});
     return exercises;
+  }
+
+  async findAllByIds(ids: Array<string>) {
+    return await this.exerciseRepository.find({ where: { id: In(ids) } });
   }
 
   async findOneById(id: string) {
