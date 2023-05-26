@@ -1,7 +1,10 @@
+import { Exercise } from 'src/exercise/entities/exercise.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -36,9 +39,9 @@ export class Workout {
   @Column()
   completed: boolean;
 
-  //TODO: ManyToMany exercies
-  @Column()
-  exercises: string;
+  @ManyToMany(() => Exercise)
+  @JoinTable()
+  exercises: Exercise[];
 
   @Column({ type: 'enum', enum: Status, default: Status.SCHEDULED })
   status: Status;

@@ -1,24 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Workout } from './entities/workout.entity';
 import { Repository } from 'typeorm';
+import { ExerciseService } from 'src/exercise/exercise.service';
 
 @Injectable()
 export class WorkoutService {
   constructor(
     @InjectRepository(Workout)
+    @Inject(ExerciseService)
     private readonly workouRepostiory: Repository<Workout>,
+    private readonly exerciseService: ExerciseService,
   ) {}
 
   async create(createWorkoutDto: CreateWorkoutDto) {
-    const workout = this.workouRepostiory.create(createWorkoutDto);
+    const { exercises, ...restCreateData } = createWorkoutDto;
+
+    const exercisesDB = await this.exerciseService.findAllByIds(exercises);
+    const workout = this.workouRepostiory.create({
+      ...restCreateData,
+      exercises: exercisesDB,
+    });
     return await this.workouRepostiory.save(workout);
   }
 
   async findAll() {
-    const workouts = await this.workouRepostiory.find({});
+    const workouts = await this.workouRepostiory.find({
+      relations: {
+        exercises: true,
+      },
+    });
     return workouts;
   }
 
@@ -27,17 +40,29 @@ export class WorkoutService {
     return workout;
   }
 
-  async update(id: string, updateWorkoutDto: UpdateWorkoutDto) {
+  async update(
+    id: string,
+    updateWorkoutDto: UpdateWorkoutDto,
+  ): Promise<Workout> {
     const workout = await this.workouRepostiory.findOneBy({ id: id });
     if (!workout) {
       throw new Error('Workout not found');
     }
 
+    if (updateWorkoutDto.exercises) {
+      const exercises = await this.exerciseService.findAllByIds(
+        updateWorkoutDto.exercises,
+      );
+      workout.exercises = exercises;
+    } else {
+      workout.exercises = workout.exercises;
+    }
+
     workout.name = updateWorkoutDto.name || workout.name;
+    workout.description = updateWorkoutDto.description || workout.description;
     workout.scheduledDate =
       updateWorkoutDto.scheduledDate || workout.scheduledDate;
     workout.completed = updateWorkoutDto.completed || workout.completed;
-    workout.exercises = updateWorkoutDto.exercises || workout.exercises;
     workout.status = updateWorkoutDto.status || workout.status;
     workout.repeat = updateWorkoutDto.repeat || workout.repeat;
     workout.repeatFrequency =

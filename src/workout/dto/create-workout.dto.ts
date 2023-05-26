@@ -13,8 +13,8 @@ import {
 } from 'class-validator';
 import { RepeatFrequency, Status } from '../entities/workout.entity';
 import { ArrayMinSize } from 'class-validator';
-import { ToBoolean } from 'src/decorators/to-bolean.decorator';
 import { ArrayToNumbers } from 'src/decorators/array-to-number.decorator';
+import { ToBoolean } from 'src/decorators/to-bolean.decorator';
 
 export class CreateWorkoutDto {
   @IsString()
@@ -31,8 +31,9 @@ export class CreateWorkoutDto {
   @ToBoolean()
   completed: boolean;
 
-  @IsString()
-  exercises: string;
+  @IsArray()
+  @IsString({ each: true })
+  exercises: string[];
 
   @IsEnum(Status)
   status: Status;
