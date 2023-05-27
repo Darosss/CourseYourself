@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,7 +10,6 @@ import { ExerciseService } from 'src/exercise/exercise.service';
 export class WorkoutService {
   constructor(
     @InjectRepository(Workout)
-    @Inject(ExerciseService)
     private readonly workouRepostiory: Repository<Workout>,
     private readonly exerciseService: ExerciseService,
   ) {}
