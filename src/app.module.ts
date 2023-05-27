@@ -10,6 +10,7 @@ import { WorkoutModule } from './workout/workout.module';
 import configuration from './config/configuration';
 import dbConfig from './config/db.config';
 import { ExerciseModule } from './exercise/exercise.module';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ExerciseModule } from './exercise/exercise.module';
     AuthModule,
     WorkoutModule,
     ExerciseModule,
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [
