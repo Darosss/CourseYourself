@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -34,6 +34,10 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
+  async findAllByIds(ids: Array<string>) {
+    return await this.userRepository.find({ where: { id: In(ids) } });
+  }
+
   async getUserById(userId: string): Promise<UserWOPassword> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...user } = await this.userRepository.findOneBy({
@@ -43,7 +47,20 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneBy({ email: email });
+    return this.userRepository.findOneBy({
+      email: email,
+    });
+  }
+
+  async getUserLoginCredentials(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email: email,
+      },
+      select: {
+        password: true,
+      },
+    });
   }
 
   async updateUserProfile(
