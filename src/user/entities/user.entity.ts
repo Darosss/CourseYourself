@@ -1,9 +1,11 @@
+import { Group } from 'src/group/entities/group.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -37,4 +39,7 @@ export class User {
 
   @Column('text', { nullable: true })
   workoutPreferences: string;
+
+  @ManyToMany(() => Group, (group) => group.users)
+  groups: Group[];
 }
