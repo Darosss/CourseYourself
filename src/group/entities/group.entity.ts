@@ -24,7 +24,7 @@ export class Group {
   @ManyToOne(() => User)
   createdBy: string;
 
-  @ManyToMany(() => User, (users) => users.id)
+  @ManyToMany(() => User, (users) => users.groups)
   @JoinTable()
   users: User[];
 
