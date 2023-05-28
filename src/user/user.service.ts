@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -6,12 +6,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { hashPassword } from '../auth/auth.utils';
 import { UserWOPassword } from './interfaces/user.interface';
+import { GroupService } from 'src/group/group.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => GroupService))
+    private readonly groupService: GroupService,
   ) {}
 
   async registerUser(createUserDto: CreateUserDto): Promise<User> {
@@ -70,6 +73,13 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ id: userId });
     if (!user) {
       throw new Error('User not found');
+    }
+
+    if (updateUserDto.groups) {
+      const groups = await this.groupService.findAllByIds(updateUserDto.groups);
+      user.groups = groups;
+    } else {
+      user.groups = user.groups;
     }
 
     user.name = updateUserDto.name || user.name;
