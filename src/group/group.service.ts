@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateGroupDtoService } from './dto/create-group.dto';
 import { UpdateGroupDtoService } from './dto/update-group.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ export class GroupService {
   constructor(
     @InjectRepository(Group)
     private readonly groupRepository: Repository<Group>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
