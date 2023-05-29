@@ -5,6 +5,7 @@ import {
   MaxLength,
   IsArray,
   ArrayUnique,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateGroupDto {
@@ -19,5 +20,6 @@ export class CreateGroupDto {
   @IsArray()
   @IsString({ each: true })
   @ArrayUnique()
+  @IsOptional()
   users: string[];
 }
