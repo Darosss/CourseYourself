@@ -1,7 +1,9 @@
+import { Workout } from 'src/workout/entities/workout.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -38,6 +40,9 @@ export class Exercise {
     default: DifficultyLevel.INTERMEDIATE,
   })
   difficultyLevel: DifficultyLevel;
+
+  @ManyToMany(() => Workout, (workout) => workout.exercises)
+  workouts: Workout[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;
