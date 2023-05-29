@@ -18,7 +18,12 @@ export class GroupService {
   async create(createGroupDto: CreateGroupDto, creatorEmail: string) {
     const creator = await this.userService.getUserByEmail(creatorEmail);
     const { users, ...restCreateData } = createGroupDto;
-    const usersDB = await this.userService.findAllByIds(users);
+    const usersDB = users ? await this.userService.findAllByIds(users) : [];
+
+    // add creator by default if it's not in users array
+    const isCreatorInUsers = usersDB.some(({ id }) => id === creator.id);
+    !isCreatorInUsers ? usersDB.push(creator) : null;
+
     const group = this.groupRepository.create({
       users: usersDB,
       ...restCreateData,
