@@ -10,27 +10,19 @@ import {
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { UserService } from 'src/user/user.service';
 import { User } from 'src/decorators/request-user.decorator';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 
 @Controller('groups')
 export class GroupController {
-  constructor(
-    private readonly groupService: GroupService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly groupService: GroupService) {}
 
   @Post()
   async create(
     @User() user: UserRequestPayload,
     @Body() createGroupDto: CreateGroupDto,
   ) {
-    const creator = await this.userService.getUserByEmail(user.email);
-    return await this.groupService.create({
-      ...createGroupDto,
-      createdBy: creator.id,
-    });
+    return await this.groupService.create(createGroupDto, user.email);
   }
 
   @Get()

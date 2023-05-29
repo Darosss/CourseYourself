@@ -22,7 +22,7 @@ export class Group {
   description: string;
 
   @ManyToOne(() => User)
-  createdBy: string;
+  createdBy: User;
 
   @ManyToMany(() => User, (users) => users.groups)
   @JoinTable()

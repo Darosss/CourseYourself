@@ -21,8 +21,3 @@ export class CreateGroupDto {
   @ArrayUnique()
   users: string[];
 }
-
-export class CreateGroupDtoService extends CreateGroupDto {
-  @IsString()
-  createdBy: string;
-}

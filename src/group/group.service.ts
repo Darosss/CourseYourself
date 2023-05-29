@@ -1,10 +1,10 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
-import { CreateGroupDtoService } from './dto/create-group.dto';
-import { UpdateGroupDtoService } from './dto/update-group.dto';
+import { CreateGroupDto } from './dto/create-group.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
 import { In, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
+import { UpdateGroupDto } from './dto/update-group.dto';
 
 @Injectable()
 export class GroupService {
@@ -15,12 +15,14 @@ export class GroupService {
     private readonly userService: UserService,
   ) {}
 
-  async create(createGroupDto: CreateGroupDtoService) {
+  async create(createGroupDto: CreateGroupDto, creatorEmail: string) {
+    const creator = await this.userService.getUserByEmail(creatorEmail);
     const { users, ...restCreateData } = createGroupDto;
     const usersDB = await this.userService.findAllByIds(users);
     const group = this.groupRepository.create({
       users: usersDB,
       ...restCreateData,
+      createdBy: creator,
     });
     return await this.groupRepository.save(group);
   }
@@ -41,7 +43,7 @@ export class GroupService {
     return group;
   }
 
-  async update(id: string, updateGroupDto: UpdateGroupDtoService) {
+  async update(id: string, updateGroupDto: UpdateGroupDto) {
     const group = await this.groupRepository.findOneBy({ id: id });
     if (!group) {
       throw new Error('Group not found');
