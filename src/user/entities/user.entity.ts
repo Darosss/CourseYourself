@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToMany,
 } from 'typeorm';
+import { Notification } from 'src/notification/entities/notification.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -42,4 +43,9 @@ export class User {
 
   @ManyToMany(() => Group, (group) => group.users)
   groups: Group[];
+
+  @ManyToMany(() => Notification, (notifications) => notifications, {
+    nullable: true,
+  })
+  notifications: Notification[];
 }
