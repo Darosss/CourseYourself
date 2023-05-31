@@ -12,6 +12,7 @@ import dbConfig from './config/db.config';
 import { ExerciseModule } from './exercise/exercise.module';
 import { GroupModule } from './group/group.module';
 import { NotificationModule } from './notification/notification.module';
+import { ProgressModule } from './progress/progress.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { NotificationModule } from './notification/notification.module';
     ExerciseModule,
     GroupModule,
     NotificationModule,
+    ProgressModule,
   ],
   controllers: [AppController],
   providers: [
