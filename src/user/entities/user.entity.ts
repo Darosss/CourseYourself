@@ -6,8 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
+  OneToMany,
 } from 'typeorm';
 import { Notification } from 'src/notification/entities/notification.entity';
+import { Progress } from 'src/progress/entities/progress.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -48,4 +50,7 @@ export class User {
     nullable: true,
   })
   notifications: Notification[];
+
+  @OneToMany(() => Progress, (progress) => progress.user, { nullable: true })
+  progress: Progress[];
 }
