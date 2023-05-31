@@ -35,7 +35,12 @@ export class WorkoutService {
   }
 
   async findOneById(id: string) {
-    const workout = await this.workouRepostiory.findOneBy({ id: id });
+    const workout = await this.workouRepostiory.findOne({
+      where: { id: id },
+      relations: {
+        exercises: true,
+      },
+    });
     return workout;
   }
 
