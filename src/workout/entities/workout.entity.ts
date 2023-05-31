@@ -1,10 +1,12 @@
 import { Exercise } from 'src/exercise/entities/exercise.entity';
+import { Progress } from 'src/progress/entities/progress.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -64,4 +66,7 @@ export class Workout {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedDate: Date;
+
+  @OneToMany(() => Progress, (progress) => progress.workout, { nullable: true })
+  progress: Progress[];
 }
