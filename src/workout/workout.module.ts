@@ -9,5 +9,6 @@ import { ExerciseModule } from 'src/exercise/exercise.module';
   imports: [TypeOrmModule.forFeature([Workout]), ExerciseModule],
   controllers: [WorkoutController],
   providers: [WorkoutService],
+  exports: [WorkoutService],
 })
 export class WorkoutModule {}
