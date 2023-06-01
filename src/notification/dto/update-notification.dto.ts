@@ -1,8 +1,11 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateNotificationDto } from './create-notification.dto';
-import { IsDateString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsOptional } from 'class-validator';
 
 export class UpdateNotificationDto extends PartialType(CreateNotificationDto) {
-  @IsDateString()
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
   timestamp?: Date;
 }
