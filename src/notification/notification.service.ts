@@ -73,6 +73,8 @@ export class NotificationService {
       updateNotificationDto.message || notification.message;
     notification.type = updateNotificationDto.type || notification.type;
     notification.createdBy = notification.createdBy;
+    notification.timestamp =
+      updateNotificationDto.timestamp || notification.timestamp;
 
     return this.notificationRepository.save(notification);
   }
