@@ -2,7 +2,7 @@ import { Optional } from '@nestjs/common';
 import {
   ArrayUnique,
   IsArray,
-  IsDateString,
+  IsDate,
   IsEnum,
   IsInt,
   IsString,
@@ -15,6 +15,7 @@ import { RepeatFrequency, Status } from '../entities/workout.entity';
 import { ArrayMinSize } from 'class-validator';
 import { ArrayToNumbers } from 'src/decorators/array-to-number.decorator';
 import { ToBoolean } from 'src/decorators/to-bolean.decorator';
+import { Type } from 'class-transformer';
 
 export class CreateWorkoutDto {
   @IsString()
@@ -25,7 +26,8 @@ export class CreateWorkoutDto {
   @MaxLength(256)
   description: string;
 
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   scheduledDate: Date;
 
   @ToBoolean()
