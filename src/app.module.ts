@@ -13,6 +13,7 @@ import { ExerciseModule } from './exercise/exercise.module';
 import { GroupModule } from './group/group.module';
 import { NotificationModule } from './notification/notification.module';
 import { ProgressModule } from './progress/progress.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ProgressModule } from './progress/progress.module';
     GroupModule,
     NotificationModule,
     ProgressModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [
