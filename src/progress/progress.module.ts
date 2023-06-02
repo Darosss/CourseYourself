@@ -10,5 +10,6 @@ import { WorkoutModule } from 'src/workout/workout.module';
   imports: [TypeOrmModule.forFeature([Progress]), UserModule, WorkoutModule],
   controllers: [ProgressController],
   providers: [ProgressService],
+  exports: [ProgressService],
 })
 export class ProgressModule {}
