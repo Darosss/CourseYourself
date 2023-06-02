@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Progress } from './entities/progress.entity';
 import { CreateProgressDto } from './dto/create-progress.dto';
 import { UpdateExerciseProgressDto } from './dto/update-progress.dto';
@@ -48,8 +48,8 @@ export class ProgressService {
     return await this.progressRepository.save(progress);
   }
 
-  async findAll(): Promise<Progress[]> {
-    return this.progressRepository.find();
+  async findAll(options?: FindManyOptions<Progress>): Promise<Progress[]> {
+    return this.progressRepository.find(options);
   }
 
   async findOneById(id: string): Promise<Progress> {
