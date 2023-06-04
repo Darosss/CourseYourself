@@ -12,7 +12,11 @@ import { CreateProgressDto } from './dto/create-progress.dto';
 import { UpdateExerciseProgressDto } from './dto/update-progress.dto';
 import { User } from 'src/decorators/request-user.decorator';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { SwaggerTags } from 'src/helpers/swagger.helpers';
 
+@ApiBearerAuth()
+@ApiTags(SwaggerTags.PROGRESSES)
 @Controller('progress')
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
