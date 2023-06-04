@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { CreateProgressDto } from './create-progress.dto';
 import { IsDate, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';

@@ -11,6 +11,11 @@ import { ExerciseService } from './exercise.service';
 import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { SwaggerTags } from 'src/helpers/swagger.helpers';
+
+@ApiBearerAuth()
+@ApiTags(SwaggerTags.EXERCISES)
 @Controller('exercises')
 export class ExerciseController {
   constructor(private readonly exerciseService: ExerciseService) {}
