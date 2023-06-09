@@ -5,7 +5,7 @@ import {
   MongoAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Action } from '../action.enum';
+import { Action } from '../enums/action.enum';
 import { Group } from 'src/group/entities/group.entity';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 
