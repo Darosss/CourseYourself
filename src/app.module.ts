@@ -14,6 +14,7 @@ import { GroupModule } from './group/group.module';
 import { NotificationModule } from './notification/notification.module';
 import { ProgressModule } from './progress/progress.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
     NotificationModule,
     ProgressModule,
     AnalyticsModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [
