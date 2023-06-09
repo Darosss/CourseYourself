@@ -61,8 +61,10 @@ export class UserService {
         email: email,
       },
       select: {
+        id: true,
         password: true,
         email: true,
+        isAdmin: true,
       },
     });
   }
