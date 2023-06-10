@@ -44,7 +44,17 @@ export class GroupService {
   }
 
   async findOneById(id: string) {
-    const group = await this.groupRepository.findOneBy({ id: id });
+    const group = await this.groupRepository.findOne({
+      where: { id: id },
+      select: {
+        createdBy: {
+          id: true,
+          isAdmin: true,
+          name: true,
+        },
+      },
+      relations: { createdBy: true },
+    });
     return group;
   }
 
