@@ -44,16 +44,21 @@ export class GroupService {
   }
 
   async findOneById(id: string) {
-    const group = await this.groupRepository.findOneBy({ id: id });
+    const group = await this.groupRepository.findOne({
+      where: { id: id },
+      select: {
+        createdBy: {
+          id: true,
+          isAdmin: true,
+          name: true,
+        },
+      },
+      relations: { createdBy: true },
+    });
     return group;
   }
 
-  async update(id: string, updateGroupDto: UpdateGroupDto) {
-    const group = await this.groupRepository.findOneBy({ id: id });
-    if (!group) {
-      throw new Error('Group not found');
-    }
-
+  async update(group: Group, updateGroupDto: UpdateGroupDto) {
     if (updateGroupDto.users) {
       const users = await this.userService.findAllByIds(updateGroupDto.users);
       group.users = users;
@@ -69,6 +74,6 @@ export class GroupService {
   }
 
   async remove(id: string) {
-    return await this.groupRepository.delete({ id: id });
+    return this.groupRepository.delete({ id: id });
   }
 }

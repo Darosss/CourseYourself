@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -14,14 +16,25 @@ import { User } from 'src/decorators/request-user.decorator';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SwaggerTags } from 'src/helpers/swagger.helpers';
+import { CheckPolicies } from 'src/decorators/check-policies.decorator';
+import { PoliciesGuard } from 'src/casl/policies.guard';
+import { GroupEntity } from './decorators/group-entity.decorator';
+import { Group } from './entities/group.entity';
+import {
+  CreateGroupHandler,
+  UpdateGroupHandler,
+  RemoveGroupHandler,
+} from 'src/casl/policies';
 
 @ApiBearerAuth()
+@UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.GROUPS)
 @Controller('groups')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @Post()
+  @CheckPolicies(CreateGroupHandler)
   async create(
     @User() user: UserRequestPayload,
     @Body() createGroupDto: CreateGroupDto,
@@ -40,15 +53,19 @@ export class GroupController {
   }
 
   @Patch(':id')
+  @CheckPolicies(UpdateGroupHandler)
   async update(
-    @Param('id') id: string,
+    @GroupEntity() group: Group,
     @Body() updateGroupDto: UpdateGroupDto,
   ) {
-    return await this.groupService.update(id, updateGroupDto);
+    return await this.groupService.update(group, updateGroupDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.groupService.remove(id);
+  @CheckPolicies(RemoveGroupHandler)
+  async remove(@Param('id') _: string, @GroupEntity() { id }: Group) {
+    const removed = await this.groupService.remove(id);
+    if (removed) return { message: 'Group removed successfully' };
+    else throw new InternalServerErrorException();
   }
 }
