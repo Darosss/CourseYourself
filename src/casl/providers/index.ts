@@ -1,4 +1,5 @@
 import { Provider } from '@nestjs/common';
 
-//TODO: add needed providers
-export const providers: Provider[] = [];
+import { groupPolicyProviders } from './groups';
+
+export const providers: Provider[] = [...groupPolicyProviders];
