@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Workout } from './entities/workout.entity';
 import { Repository } from 'typeorm';
 import { ExerciseService } from 'src/exercise/exercise.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class WorkoutService {
@@ -12,15 +13,18 @@ export class WorkoutService {
     @InjectRepository(Workout)
     private readonly workouRepostiory: Repository<Workout>,
     private readonly exerciseService: ExerciseService,
+    private readonly userService: UserService,
   ) {}
 
-  async create(createWorkoutDto: CreateWorkoutDto) {
+  async create(createWorkoutDto: CreateWorkoutDto, creatorId: string) {
+    const creator = await this.userService.getUserById(creatorId);
     const { exercises, ...restCreateData } = createWorkoutDto;
 
     const exercisesDB = await this.exerciseService.findAllByIds(exercises);
     const workout = this.workouRepostiory.create({
       ...restCreateData,
       exercises: exercisesDB,
+      createdBy: creator,
     });
     return await this.workouRepostiory.save(workout);
   }
@@ -37,22 +41,25 @@ export class WorkoutService {
   async findOneById(id: string) {
     const workout = await this.workouRepostiory.findOne({
       where: { id: id },
+      select: {
+        createdBy: {
+          id: true,
+          isAdmin: true,
+          name: true,
+        },
+      },
       relations: {
         exercises: true,
+        createdBy: true,
       },
     });
     return workout;
   }
 
   async update(
-    id: string,
+    workout: Workout,
     updateWorkoutDto: UpdateWorkoutDto,
   ): Promise<Workout> {
-    const workout = await this.workouRepostiory.findOneBy({ id: id });
-    if (!workout) {
-      throw new Error('Workout not found');
-    }
-
     if (updateWorkoutDto.exercises) {
       const exercises = await this.exerciseService.findAllByIds(
         updateWorkoutDto.exercises,
