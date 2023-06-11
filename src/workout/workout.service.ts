@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Workout } from './entities/workout.entity';
 import { Repository } from 'typeorm';
 import { ExerciseService } from 'src/exercise/exercise.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class WorkoutService {
@@ -12,15 +13,18 @@ export class WorkoutService {
     @InjectRepository(Workout)
     private readonly workouRepostiory: Repository<Workout>,
     private readonly exerciseService: ExerciseService,
+    private readonly userService: UserService,
   ) {}
 
-  async create(createWorkoutDto: CreateWorkoutDto) {
+  async create(createWorkoutDto: CreateWorkoutDto, creatorId: string) {
+    const creator = await this.userService.getUserById(creatorId);
     const { exercises, ...restCreateData } = createWorkoutDto;
 
     const exercisesDB = await this.exerciseService.findAllByIds(exercises);
     const workout = this.workouRepostiory.create({
       ...restCreateData,
       exercises: exercisesDB,
+      createdBy: creator,
     });
     return await this.workouRepostiory.save(workout);
   }
