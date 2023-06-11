@@ -45,14 +45,9 @@ export class WorkoutService {
   }
 
   async update(
-    id: string,
+    workout: Workout,
     updateWorkoutDto: UpdateWorkoutDto,
   ): Promise<Workout> {
-    const workout = await this.workouRepostiory.findOneBy({ id: id });
-    if (!workout) {
-      throw new Error('Workout not found');
-    }
-
     if (updateWorkoutDto.exercises) {
       const exercises = await this.exerciseService.findAllByIds(
         updateWorkoutDto.exercises,
