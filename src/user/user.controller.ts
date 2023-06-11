@@ -8,9 +8,10 @@ import { CheckPolicies } from 'src/decorators/check-policies.decorator';
 import { UpdateUserHandler } from 'src/casl/policies';
 import { User } from './entities/user.entity';
 import { UserEntity } from './decorators/user-entity.decorator';
+import { USERS_ROUTE_NAME } from './constants';
 @ApiBearerAuth()
 @ApiTags(SwaggerTags.USERS)
-@Controller('users')
+@Controller(USERS_ROUTE_NAME)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
