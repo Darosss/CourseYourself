@@ -42,10 +42,12 @@ export class UserService {
   }
 
   async getUserById(userId: string): Promise<UserWOPassword> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...user } = await this.userRepository.findOneBy({
-      id: userId,
-    });
+    const user = (await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    })) as UserWOPassword;
+
     return user;
   }
 
