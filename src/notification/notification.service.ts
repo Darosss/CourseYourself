@@ -45,8 +45,19 @@ export class NotificationService {
   }
 
   async findOneById(id: string) {
-    const notification = await this.notificationRepository.findOneBy({
-      id: id,
+    const notification = await this.notificationRepository.findOne({
+      where: {
+        id: id,
+      },
+      select: {
+        users: {
+          id: true,
+        },
+      },
+      relations: {
+        users: true,
+        createdBy: true,
+      },
     });
     return notification;
   }
