@@ -13,6 +13,7 @@ import { Workout } from 'src/workout/entities/workout.entity';
 import { Notification } from 'src/notification/entities/notification.entity';
 import { UserWOPassword } from 'src/user/interfaces/user.interface';
 import { User } from 'src/user/entities/user.entity';
+import { Exercise } from 'src/exercise/entities/exercise.entity';
 
 type Subjects =
   | UserWOPassword
@@ -23,6 +24,8 @@ type Subjects =
   | typeof Workout
   | Notification
   | typeof Notification
+  | Exercise
+  | typeof Exercise
   | 'all';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
