@@ -23,7 +23,14 @@
   - [x] exercises can be only created / edited by admins
 
 - [x] feature/role-system/notifications
+
   - [] users can read only their own notifications
   - [] admins still can read all
   - [] only admins / system can create system / progress / achievement / alert
   - [] normal user can only create reminders
+
+- [x] feature/role-system/progress
+  - [x] progress right now should be checkable by user
+  - [] users can look only on their progresses
+  - [] add shared progresses
+  - [x] admins can visit all
