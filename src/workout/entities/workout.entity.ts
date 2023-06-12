@@ -1,11 +1,13 @@
 import { Exercise } from 'src/exercise/entities/exercise.entity';
 import { Progress } from 'src/progress/entities/progress.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -60,6 +62,9 @@ export class Workout {
 
   @Column({ type: 'simple-array' })
   repeatDays: number[];
+
+  @ManyToOne(() => User)
+  createdBy?: User;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;

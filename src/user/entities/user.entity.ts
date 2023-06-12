@@ -53,4 +53,7 @@ export class User {
 
   @OneToMany(() => Progress, (progress) => progress.user, { nullable: true })
   progress: Progress[];
+
+  @Column({ default: false })
+  isAdmin: boolean;
 }

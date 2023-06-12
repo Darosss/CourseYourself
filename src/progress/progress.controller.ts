@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  InternalServerErrorException,
+  UseGuards,
 } from '@nestjs/common';
 import { ProgressService } from './progress.service';
 import { CreateProgressDto } from './dto/create-progress.dto';
@@ -14,14 +16,26 @@ import { User } from 'src/decorators/request-user.decorator';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SwaggerTags } from 'src/helpers/swagger.helpers';
+import { ProgressEntity } from './decorators/progress-entity.decorator';
+import { Progress } from './entities/progress.entity';
+import { CheckPolicies } from 'src/decorators/check-policies.decorator';
+import {
+  CreateProgressHandler,
+  RemoveProgressHandler,
+  UpdateProgressHandler,
+} from 'src/casl/policies';
+import { PoliciesGuard } from 'src/casl/policies.guard';
+import { PROGRESS_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
+@UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.PROGRESSES)
-@Controller('progress')
+@Controller(PROGRESS_ROUTE_NAME)
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
 
   @Post()
+  @CheckPolicies(CreateProgressHandler)
   create(
     @User() user: UserRequestPayload,
     @Body() createProgressDto: CreateProgressDto,
@@ -40,20 +54,25 @@ export class ProgressController {
   }
 
   @Patch(':id/exercises/:exerciseId')
+  @CheckPolicies(UpdateProgressHandler)
   update(
-    @Param('id') id: string,
+    @Param('id') _: string,
     @Param('exerciseId') exerciseId: string,
+    @ProgressEntity() progress: Progress,
     @Body() updateExerciseProgressDto: UpdateExerciseProgressDto,
   ) {
     return this.progressService.updateWorkoutExercise(
-      id,
+      progress,
       exerciseId,
       updateExerciseProgressDto,
     );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.progressService.remove(id);
+  @CheckPolicies(RemoveProgressHandler)
+  async remove(@Param('id') _: string, @ProgressEntity() { id }: Progress) {
+    const removed = await this.progressService.remove(id);
+    if (removed) return { message: 'Progress removed successfully' };
+    else throw new InternalServerErrorException();
   }
 }

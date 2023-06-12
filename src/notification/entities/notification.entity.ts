@@ -44,7 +44,7 @@ export class Notification {
   timestamp: Date;
 
   @ManyToOne(() => User)
-  createdBy: User;
+  createdBy?: User;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;

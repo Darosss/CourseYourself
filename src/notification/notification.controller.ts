@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
@@ -14,14 +16,26 @@ import { User } from 'src/decorators/request-user.decorator';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SwaggerTags } from 'src/helpers/swagger.helpers';
+import { PoliciesGuard } from 'src/casl/policies.guard';
+import { CheckPolicies } from 'src/decorators/check-policies.decorator';
+import {
+  CreateNotificationHandler,
+  RemoveNotificationHandler,
+  UpdateNotificationHandler,
+} from 'src/casl/policies';
+import { NotificationEntity } from './decorators/notification-entity.decorator';
+import { Notification } from './entities/notification.entity';
+import { NOTIFICATIONS_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
+@UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.NOTIFICATIONS)
-@Controller('notifications')
+@Controller(NOTIFICATIONS_ROUTE_NAME)
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Post()
+  @CheckPolicies(CreateNotificationHandler)
   async create(
     @User() user: UserRequestPayload,
     @Body() createNotificationDto: CreateNotificationDto,
@@ -40,15 +54,23 @@ export class NotificationController {
   }
 
   @Patch(':id')
+  @CheckPolicies(UpdateNotificationHandler)
   async update(
-    @Param('id') id: string,
+    @Param('id') _: string,
+    @NotificationEntity() notification: Notification,
     @Body() updateNotificationDto: UpdateNotificationDto,
   ) {
-    return this.notificationService.update(id, updateNotificationDto);
+    return this.notificationService.update(notification, updateNotificationDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.notificationService.remove(id);
+  @CheckPolicies(RemoveNotificationHandler)
+  async remove(
+    @Param('id') _: string,
+    @NotificationEntity() { id }: Notification,
+  ) {
+    const removed = this.notificationService.remove(id);
+    if (removed) return { message: 'Notification removed successfully' };
+    else throw new InternalServerErrorException();
   }
 }

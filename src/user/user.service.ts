@@ -42,10 +42,12 @@ export class UserService {
   }
 
   async getUserById(userId: string): Promise<UserWOPassword> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...user } = await this.userRepository.findOneBy({
-      id: userId,
-    });
+    const user = (await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    })) as UserWOPassword;
+
     return user;
   }
 
@@ -61,36 +63,34 @@ export class UserService {
         email: email,
       },
       select: {
+        id: true,
         password: true,
         email: true,
+        isAdmin: true,
       },
     });
   }
 
   async updateUserProfile(
-    userId: string,
+    user: User,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id: userId });
-    if (!user) {
-      throw new Error('User not found');
-    }
-
+    const updatedUser = user;
     if (updateUserDto.groups) {
       const groups = await this.groupService.findAllByIds(updateUserDto.groups);
-      user.groups = groups;
+      updatedUser.groups = groups;
     } else {
-      user.groups = user.groups;
+      updatedUser.groups = user.groups;
     }
 
-    user.name = updateUserDto.name || user.name;
-    user.email = updateUserDto.email || user.email;
-    user.age = updateUserDto.age || user.age;
-    user.gender = updateUserDto.gender || user.gender;
-    user.fitnessLevel = updateUserDto.fitnessLevel || user.fitnessLevel;
-    user.workoutPreferences =
+    updatedUser.name = updateUserDto.name || user.name;
+    updatedUser.email = updateUserDto.email || user.email;
+    updatedUser.age = updateUserDto.age || user.age;
+    updatedUser.gender = updateUserDto.gender || user.gender;
+    updatedUser.fitnessLevel = updateUserDto.fitnessLevel || user.fitnessLevel;
+    updatedUser.workoutPreferences =
       updateUserDto.workoutPreferences || user.workoutPreferences;
 
-    return this.userRepository.save(user);
+    return this.userRepository.save(updatedUser);
   }
 }

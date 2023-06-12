@@ -1,11 +1,17 @@
-import { Controller, Get, Body, Param, Put } from '@nestjs/common';
+import { Controller, Get, Body, Param, Put, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SwaggerTags } from 'src/helpers/swagger.helpers';
+import { PoliciesGuard } from 'src/casl/policies.guard';
+import { CheckPolicies } from 'src/decorators/check-policies.decorator';
+import { UpdateUserHandler } from 'src/casl/policies';
+import { User } from './entities/user.entity';
+import { UserEntity } from './decorators/user-entity.decorator';
+import { USERS_ROUTE_NAME } from './constants';
 @ApiBearerAuth()
 @ApiTags(SwaggerTags.USERS)
-@Controller('users')
+@Controller(USERS_ROUTE_NAME)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -16,14 +22,14 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(UpdateUserHandler)
   async updateUserProfile(
-    @Param('id') userId: string,
+    @Param('id') _: string,
+    @UserEntity() user: User,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const user = await this.userService.updateUserProfile(
-      userId,
-      updateUserDto,
-    );
+    await this.userService.updateUserProfile(user, updateUserDto);
     return { message: 'User profile updated successfully', user };
   }
 }

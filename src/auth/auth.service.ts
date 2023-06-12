@@ -5,6 +5,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
+import { UserWOPassword } from 'src/user/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
     return await this.usersService.registerUser(createUserDto);
   }
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(email: string, pass: string): Promise<UserWOPassword> {
     const user = await this.usersService.getUserLoginCredentials(email);
     if (user) {
       const passwordMatch = await comparePasswords(pass, user.password);
@@ -33,7 +34,8 @@ export class AuthService {
   }
 
   async login(user: LoginDto) {
-    const payload = { email: user.email, password: user.password };
+    const { id, isAdmin } = await this.usersService.getUserByEmail(user.email);
+    const payload = { email: user.email, id: id, isAdmin: isAdmin };
     return {
       access_token: this.jwtService.sign(payload),
     };
