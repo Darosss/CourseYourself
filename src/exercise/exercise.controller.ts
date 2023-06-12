@@ -18,11 +18,12 @@ import { SwaggerTags } from 'src/helpers/swagger.helpers';
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { CheckPolicies } from 'src/decorators/check-policies.decorator';
 import { AdminExerciseHandler } from 'src/casl/policies';
+import { EXERCISES_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
 @UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.EXERCISES)
-@Controller('exercises')
+@Controller(EXERCISES_ROUTE_NAME)
 export class ExerciseController {
   constructor(private readonly exerciseService: ExerciseService) {}
 
