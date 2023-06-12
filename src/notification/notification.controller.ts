@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
@@ -68,6 +69,8 @@ export class NotificationController {
     @Param('id') _: string,
     @NotificationEntity() { id }: Notification,
   ) {
-    return this.notificationService.remove(id);
+    const removed = this.notificationService.remove(id);
+    if (removed) return { message: 'Notification removed successfully' };
+    else throw new InternalServerErrorException();
   }
 }
