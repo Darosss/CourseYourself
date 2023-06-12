@@ -25,11 +25,12 @@ import {
   UpdateProgressHandler,
 } from 'src/casl/policies';
 import { PoliciesGuard } from 'src/casl/policies.guard';
+import { PROGRESS_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
 @UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.PROGRESSES)
-@Controller('progress')
+@Controller(PROGRESS_ROUTE_NAME)
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
 
