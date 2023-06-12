@@ -10,6 +10,7 @@ import { Group } from 'src/group/entities/group.entity';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 import { FlatGroup, FlatWorkout } from '../types';
 import { Workout } from 'src/workout/entities/workout.entity';
+import { Notification } from 'src/notification/entities/notification.entity';
 import { UserWOPassword } from 'src/user/interfaces/user.interface';
 import { User } from 'src/user/entities/user.entity';
 
@@ -20,6 +21,8 @@ type Subjects =
   | typeof Group
   | Workout
   | typeof Workout
+  | Notification
+  | typeof Notification
   | 'all';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
@@ -48,6 +51,12 @@ export class CaslAbilityFactory {
       //Workouts permissions
       can(Action.Create, Workout);
       can<FlatWorkout>([Action.Delete, Action.Update], Workout, {
+        'createdBy.id': user.id,
+      });
+
+      //Notifications permissions
+      can(Action.Create, [Notification]);
+      can<FlatWorkout>([Action.Delete, Action.Update], Notification, {
         'createdBy.id': user.id,
       });
     }
