@@ -26,11 +26,12 @@ import {
 import { PoliciesGuard } from 'src/casl/policies.guard';
 import { WorkoutEntity } from './decorators/workout-entity.decorator';
 import { Workout } from './entities/workout.entity';
+import { WORKOUTS_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
 @ApiTags(SwaggerTags.WORKOUTS)
 @UseGuards(PoliciesGuard)
-@Controller('workouts')
+@Controller(WORKOUTS_ROUTE_NAME)
 export class WorkoutController {
   constructor(private readonly workoutService: WorkoutService) {}
 
