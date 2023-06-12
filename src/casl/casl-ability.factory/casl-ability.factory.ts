@@ -8,12 +8,13 @@ import { Injectable } from '@nestjs/common';
 import { Action } from '../enums/action.enum';
 import { Group } from 'src/group/entities/group.entity';
 import { UserRequestPayload } from 'src/interfaces/request-types.interface';
-import { FlatGroup, FlatWorkout } from '../types';
+import { FlatGroup, FlatProgress, FlatWorkout } from '../types';
 import { Workout } from 'src/workout/entities/workout.entity';
 import { Notification } from 'src/notification/entities/notification.entity';
 import { UserWOPassword } from 'src/user/interfaces/user.interface';
 import { User } from 'src/user/entities/user.entity';
 import { Exercise } from 'src/exercise/entities/exercise.entity';
+import { Progress } from 'src/progress/entities/progress.entity';
 
 type Subjects =
   | UserWOPassword
@@ -26,6 +27,8 @@ type Subjects =
   | typeof Notification
   | Exercise
   | typeof Exercise
+  | Progress
+  | typeof Progress
   | 'all';
 
 export type AppAbility = MongoAbility<[Action, Subjects]>;
@@ -61,6 +64,12 @@ export class CaslAbilityFactory {
       can(Action.Create, [Notification]);
       can<FlatWorkout>([Action.Delete, Action.Update], Notification, {
         'createdBy.id': user.id,
+      });
+
+      //Progresses permissions
+      can(Action.Create, [Progress]);
+      can<FlatProgress>([Action.Delete, Action.Update], Progress, {
+        'user.id': user.id,
       });
     }
 
