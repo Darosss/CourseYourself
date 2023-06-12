@@ -25,11 +25,12 @@ import {
   UpdateGroupHandler,
   RemoveGroupHandler,
 } from 'src/casl/policies';
+import { GROUPS_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
 @UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.GROUPS)
-@Controller('groups')
+@Controller(GROUPS_ROUTE_NAME)
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
