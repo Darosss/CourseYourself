@@ -62,32 +62,30 @@ export class NotificationService {
     return notification;
   }
 
-  async update(id: string, updateNotificationDto: UpdateNotificationDto) {
-    const notification = await this.notificationRepository.findOneBy({
-      id: id,
-    });
-    if (!notification) {
-      throw new Error('Notification not found');
-    }
+  async update(
+    notification: Notification,
+    updateNotificationDto: UpdateNotificationDto,
+  ) {
+    const updatedNotification = notification;
 
     if (updateNotificationDto.users) {
       const users = await this.userService.findAllByIds(
         updateNotificationDto.users,
       );
-      notification.users = users;
+      updatedNotification.users = users;
     } else {
-      notification.users = notification.users;
+      updatedNotification.users = notification.users;
     }
 
-    notification.name = updateNotificationDto.name || notification.name;
-    notification.message =
+    updatedNotification.name = updateNotificationDto.name || notification.name;
+    updatedNotification.message =
       updateNotificationDto.message || notification.message;
-    notification.type = updateNotificationDto.type || notification.type;
-    notification.createdBy = notification.createdBy;
-    notification.timestamp =
+    updatedNotification.type = updateNotificationDto.type || notification.type;
+    updatedNotification.createdBy = notification.createdBy;
+    updatedNotification.timestamp =
       updateNotificationDto.timestamp || notification.timestamp;
 
-    return this.notificationRepository.save(notification);
+    return this.notificationRepository.save(updatedNotification);
   }
 
   async remove(id: string) {
