@@ -53,7 +53,11 @@ export class ProgressService {
   }
 
   async findOneById(id: string): Promise<Progress> {
-    return this.progressRepository.findOne({ where: { id: id } });
+    return this.progressRepository.findOne({
+      where: { id: id },
+      select: { user: { id: true } },
+      relations: { user: true },
+    });
   }
 
   async updateWorkoutExercise(
