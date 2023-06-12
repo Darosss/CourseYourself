@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Progress } from './entities/progress.entity';
@@ -57,23 +57,20 @@ export class ProgressService {
   }
 
   async updateWorkoutExercise(
-    id: string,
+    progress: Progress,
     exerciseId: string,
     updateExerciseProgressDto: UpdateExerciseProgressDto,
   ): Promise<Progress> {
-    const progress = await this.progressRepository.findOneBy({ id: id });
-    if (!progress) {
-      throw new Error('Progress not found');
-    }
-    progress.user = progress.user;
-    progress.workout = progress.workout;
+    const updatedProgress = progress;
+    updatedProgress.user = progress.user;
+    updatedProgress.workout = progress.workout;
 
     const exerciseIndex = progress.workoutExercises.findIndex(
       (exercise) => exercise.exerciseId == exerciseId,
     );
 
     if (exerciseIndex === -1) {
-      throw new Error('Exercise not found in Progress entry');
+      throw new ForbiddenException('Exercise not found in Progress entry');
     }
 
     const updatingExercise = progress.workoutExercises[exerciseIndex];
@@ -87,7 +84,7 @@ export class ProgressService {
       duration: updateExerciseProgressDto.duration || updatingExercise.duration,
     };
 
-    return this.progressRepository.save(progress);
+    return this.progressRepository.save(updatedProgress);
   }
 
   async remove(id: string) {
