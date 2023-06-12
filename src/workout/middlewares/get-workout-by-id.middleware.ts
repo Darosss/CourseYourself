@@ -17,7 +17,6 @@ export class RetrieveWorkoutByIdMiddleware implements NestMiddleware {
       throw new BadRequestException('Missing id');
     }
     const workout = await this.workoutService.findOneById(req.params.id);
-    console.log(workout, 'xd');
     if (!workout) {
       throw new NotFoundException('Workout with provided id does not exist');
     }

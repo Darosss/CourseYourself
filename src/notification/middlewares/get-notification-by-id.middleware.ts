@@ -24,7 +24,6 @@ export class RetrieveNotificationByIdMiddleware implements NestMiddleware {
         'Notification with provided id does not exist',
       );
     }
-    console.log(req.params.id, 'xd', notification, ' xd');
     req.notification = notification;
     next();
   }
