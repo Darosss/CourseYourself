@@ -24,11 +24,12 @@ import {
 } from 'src/casl/policies';
 import { NotificationEntity } from './decorators/notification-entity.decorator';
 import { Notification } from './entities/notification.entity';
+import { NOTIFICATIONS_ROUTE_NAME } from './constants';
 
 @ApiBearerAuth()
 @UseGuards(PoliciesGuard)
 @ApiTags(SwaggerTags.NOTIFICATIONS)
-@Controller('notifications')
+@Controller(NOTIFICATIONS_ROUTE_NAME)
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
