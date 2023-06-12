@@ -5,6 +5,7 @@ import { workoutPolicyProviders } from './workouts';
 import { userPolicyProviders } from './users';
 import { notificationPolicyProviders } from './notifications';
 import { exercisePolicyProviders } from './exercises';
+import { progressPolicyProviders } from './progresses';
 
 export const providers: Provider[] = [
   ...userPolicyProviders,
@@ -12,4 +13,5 @@ export const providers: Provider[] = [
   ...workoutPolicyProviders,
   ...notificationPolicyProviders,
   ...exercisePolicyProviders,
+  ...progressPolicyProviders,
 ];
