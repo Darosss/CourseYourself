@@ -17,6 +17,11 @@ export class UserService {
     private readonly groupService: GroupService,
   ) {}
 
+  async findAll() {
+    const users = await this.userRepository.find({});
+    return users;
+  }
+
   async registerUser(createUserDto: CreateUserDto): Promise<User> {
     const { email, password, name } = createUserDto;
 
