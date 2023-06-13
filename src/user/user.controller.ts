@@ -15,6 +15,11 @@ import { USERS_ROUTE_NAME } from './constants';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  async getUsers() {
+    const users = await this.userService.findAll();
+    return { users };
+  }
   @Get(':id')
   async getUserProfile(@Param('id') userId: string) {
     const user = await this.userService.getUserById(userId);
