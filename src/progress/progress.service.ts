@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Progress } from './entities/progress.entity';
@@ -13,9 +13,7 @@ export class ProgressService {
   constructor(
     @InjectRepository(Progress)
     private readonly progressRepository: Repository<Progress>,
-    @Inject(UserService)
     private readonly userService: UserService,
-    @Inject(WorkoutService)
     private readonly workoutService: WorkoutService,
   ) {}
 
