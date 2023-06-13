@@ -16,13 +16,13 @@ export class User {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, select: false })
   email: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamp', select: false })
   updatedDate: Date;
 
   @Column({ nullable: true })
@@ -31,16 +31,16 @@ export class User {
   @Column({ select: false })
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   age: number;
 
   @Column({ nullable: true })
   gender: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   fitnessLevel: string;
 
-  @Column('text', { nullable: true })
+  @Column('text', { nullable: true, select: false })
   workoutPreferences: string;
 
   @ManyToMany(() => Group, (group) => group.users)
