@@ -26,15 +26,20 @@ An workout application that provides:
 
 ## Installation
 
-Firstly clone the repo
+### Prerequisites
 
-```bash
+- application is tested with mysql(`v8.0.33`)
+- download here: https://dev.mysql.com/downloads/windows/installer/8.0.html
+
+Clone the repo
+
+```sh
 $ git clone https://github.com/Darosss/CourseYourself
 ```
 
 then navigate to folder and run:
 
-```bash
+```sh
 $ npm install
 ```
 
