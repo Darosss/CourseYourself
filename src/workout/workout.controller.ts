@@ -20,6 +20,7 @@ import { UserRequestPayload } from 'src/interfaces/request-types.interface';
 import { CheckPolicies } from 'src/decorators/check-policies.decorator';
 import {
   CreateWorkoutHandler,
+  ReadWorkoutHandler,
   RemoveWorkoutHandler,
   UpdateWorkoutHandler,
 } from 'src/casl/policies';
@@ -45,13 +46,18 @@ export class WorkoutController {
   }
 
   @Get()
-  async findAll() {
-    return await this.workoutService.findAll();
+  async findAll(@User() user: UserRequestPayload) {
+    const workouts = await this.workoutService.findAll();
+    const filteredWorkouts = workouts.filter(
+      ({ createdBy }) => createdBy.id === user.id,
+    );
+    return filteredWorkouts;
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.workoutService.findOneById(id);
+  @CheckPolicies(ReadWorkoutHandler)
+  async findOne(@Param('id') id: string, @WorkoutEntity() workout: Workout) {
+    return workout;
   }
 
   @Patch(':id')

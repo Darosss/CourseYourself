@@ -33,6 +33,7 @@ export class WorkoutService {
     const workouts = await this.workouRepostiory.find({
       relations: {
         exercises: true,
+        createdBy: true,
       },
     });
     return workouts;

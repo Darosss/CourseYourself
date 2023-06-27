@@ -43,8 +43,6 @@ export class CaslAbilityFactory {
     if (user.isAdmin) {
       can(Action.Manage, 'all');
     } else {
-      can(Action.Read, 'all');
-
       //Users permissions
       can(Action.Update, User, { id: user.id });
 
@@ -56,7 +54,7 @@ export class CaslAbilityFactory {
 
       //Workouts permissions
       can(Action.Create, Workout);
-      can<FlatWorkout>([Action.Delete, Action.Update], Workout, {
+      can<FlatWorkout>([Action.Delete, Action.Update, Action.Read], Workout, {
         'createdBy.id': user.id,
       });
 
