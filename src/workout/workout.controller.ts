@@ -46,8 +46,12 @@ export class WorkoutController {
   }
 
   @Get()
-  async findAll() {
-    return await this.workoutService.findAll();
+  async findAll(@User() user: UserRequestPayload) {
+    const workouts = await this.workoutService.findAll();
+    const filteredWorkouts = workouts.filter(
+      ({ createdBy }) => createdBy.id === user.id,
+    );
+    return filteredWorkouts;
   }
 
   @Get(':id')
