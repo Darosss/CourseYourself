@@ -25,6 +25,10 @@ export class WorkoutModule {
         path: `${WORKOUTS_ROUTE_NAME}/:id`,
         method: RequestMethod.DELETE,
       },
+      {
+        path: `${WORKOUTS_ROUTE_NAME}/:id`,
+        method: RequestMethod.GET,
+      },
     );
   }
 }
